@@ -8,12 +8,22 @@ const { HeaderPage } = require('../../pages/HeaderPage');
 /** @type {import('playwright').Browser} */
 let browser;
 
+async function ensureBrowser() {
+  if (!browser || !browser.isConnected()) {
+    const headless = process.env.HEADLESS !== 'false';
+    browser = await chromium.launch({ headless });
+  }
+
+  return browser;
+}
+
 BeforeAll(async function () {
-  const headless = process.env.HEADLESS !== 'false';
-  browser = await chromium.launch({ headless });
+  await ensureBrowser();
 });
 
 Before(async function () {
+  await ensureBrowser();
+
   this.context = await browser.newContext({
     baseURL: process.env.BASE_URL,
     locale: 'pt-BR',
