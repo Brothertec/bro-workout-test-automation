@@ -8,3 +8,9 @@ Feature: Bro Workout Users page
         When I go to users page by navBar
         Then the users table should be visible
         And I should see a user and his features
+
+    Scenario: HU001.2 Should have a list Users card
+        Given I am on the home page
+        When I go to users page by card
+        Then the users table should be visible
+        And I should see a user and his features
