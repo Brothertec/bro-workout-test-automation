@@ -8,6 +8,16 @@ class ExercisesPage extends BasePage {
     super(page);
     this.heading = page.getByRole('heading', { name: 'Exercícios', level: 1 });
     this.exerciseList = page.getByRole('list');
+    this.addExerciseButton = page.getByRole('button', { name: 'Adicionar Exercício', });
+    this.exerciseCreationModal = page.getByRole('dialog');
+    this.exerciseNameInput = this.exerciseCreationModal.getByLabel('Nome do Exercício', {
+      exact: true
+    });
+    this.createExerciseButton = this.exerciseCreationModal.getByRole('button', {
+      name: 'Criar',
+      exact: true
+    });
+
   }
 
   async goto() {
@@ -19,6 +29,32 @@ class ExercisesPage extends BasePage {
     await this.page.waitForURL('**/exercises');
     await this.heading.waitFor();
   }
+
+  async openExerciseCreationModal() {
+    await this.addExerciseButton.click();
+  }
+
+  async fillExerciseName(name) {
+    await this.exerciseNameInput.fill(name);
+  }
+
+  async createExercise() {
+    await this.createExerciseButton.click();
+  }
+
+  getExerciseByName(name) {
+    return this.exerciseList.locator('li').filter({
+      hasText: name
+    });
+  }
+
+  getVideoLinkForExercise(name) {
+    return this.getExerciseByName(name).getByRole('link', {
+      name: 'Assistir Vídeo',
+      exact: true,
+    });
+  }
+
 }
 
 module.exports = { ExercisesPage };
