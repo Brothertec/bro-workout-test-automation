@@ -17,6 +17,11 @@ class ExercisesPage extends BasePage {
       name: 'Criar',
       exact: true
     });
+    this.exerciseImageUrlInput = this.exerciseCreationModal.getByLabel('URL da Imagem (opcional)', {
+      exact: true
+    });
+
+
 
   }
 
@@ -51,6 +56,20 @@ class ExercisesPage extends BasePage {
   getVideoLinkForExercise(name) {
     return this.getExerciseByName(name).getByRole('link', {
       name: 'Assistir Vídeo',
+      exact: true,
+    });
+  }
+
+  async fillExerciseImageUrl(imageUrl) {
+    await this.exerciseImageUrlInput.fill(imageUrl);
+  }
+
+  getImageForExercise(name) {
+    return this.getExerciseByName(name).locator('img');
+  }
+
+  getNameForExercise(name) {
+    return this.getExerciseByName(name).getByText(name, {
       exact: true,
     });
   }

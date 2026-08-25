@@ -24,3 +24,32 @@ Then('the created exercise should not display the "Assistir Vídeo" link', async
     await expect(videoLink).toHaveCount(0);
 });
 
+When('I create an exercise with an image', async function () {
+    this.createdExerciseName = `Exercício com imagem ${Date.now()}`;
+    this.createdExerciseImageUrl = 'https://placehold.co/120x120.png';
+
+    await this.exercisesPage.openExerciseCreationModal();
+    await this.exercisesPage.fillExerciseName(this.createdExerciseName);
+    await this.exercisesPage.fillExerciseImageUrl(this.createdExerciseImageUrl);
+    await this.exercisesPage.createExercise();
+});
+
+Then('the registered image should be displayed to the left of the created exercise name', async function () {
+    const exerciseImage = this.exercisesPage.getImageForExercise(this.createdExerciseName);
+    const exerciseName = this.exercisesPage.getNameForExercise(this.createdExerciseName);
+
+    await expect(exerciseImage).toBeVisible();
+    await expect(exerciseImage).toHaveAttribute(
+        'src',
+        this.createdExerciseImageUrl
+    );
+
+    const imagePosition = await exerciseImage.boundingBox();
+    const namePosition = await exerciseName.boundingBox();
+
+    expect(imagePosition).not.toBeNull();
+    expect(namePosition).not.toBeNull();
+
+    const imageRightEdge = imagePosition.x + imagePosition.width;
+    expect(imageRightEdge).toBeLessThanOrEqual(namePosition.x);
+});
