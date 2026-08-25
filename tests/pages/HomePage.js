@@ -30,6 +30,7 @@ class HomePage extends BasePage {
     this.startTrackingLink = page.getByRole('link', {
       name: 'Começar Acompanhamento',
     });
+    this.navBar = page.locator('header');
   }
 
   async goto() {
@@ -39,6 +40,10 @@ class HomePage extends BasePage {
 
   async goToUsers() {
     await this.viewUsersLink.click();
+  }
+
+  async goToUsersNavBar() {
+    await this.navBar.getByText('Usuários').click();
   }
 
   async goToExercises() {

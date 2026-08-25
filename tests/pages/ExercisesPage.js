@@ -1,3 +1,4 @@
+const { expect } = require('playwright/test');
 const { BasePage } = require('./BasePage');
 
 class ExercisesPage extends BasePage {
@@ -17,7 +18,7 @@ class ExercisesPage extends BasePage {
       name: 'Criar',
       exact: true
     });
-
+    this.createExerciseModal = page.getByRole('dialog');
   }
 
   async goto() {
@@ -55,6 +56,14 @@ class ExercisesPage extends BasePage {
     });
   }
 
+  // TODO: Mover para BasePage
+  async clickButton(buttonText) {
+    await this.page.getByRole('button', {name: `${buttonText}`}).click();
+  }
+
+  async warningFailVerify() {
+    await expect(this.createExerciseModal.getByText('Falha ao criar exercício')).toBeVisible();
+  }
 }
 
 module.exports = { ExercisesPage };
