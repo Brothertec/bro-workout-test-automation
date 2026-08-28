@@ -19,6 +19,9 @@ class ExercisesPage extends BasePage {
       exact: true
     });
     this.createExerciseModal = page.getByRole('dialog');
+    this.exerciseList = page.locator(".MuiList-root.MuiList-padding.css-1wduhak");
+    this.editButton = page.getByRole('button', { name: 'Editar' });
+    this.deleteButton = page.getByRole('button', { name: 'Deletar' });
   }
 
   async goto() {

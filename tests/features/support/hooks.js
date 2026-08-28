@@ -8,10 +8,33 @@ const { HeaderPage } = require('../../pages/HeaderPage');
 /** @type {import('playwright').Browser} */
 let browser;
 
+function isHeadless() {
+  if (process.env.HEADLESS === 'false') return false;
+  if (process.env.HEADLESS === 'true' || process.env.CI === 'true') return true;
+  return false;
+}
+
+async function launchBrowser() {
+  const headless = isHeadless();
+  const options = {
+    headless,
+    slowMo: headless ? 0 : 250,
+    args: ['--start-maximized'],
+  };
+
+  try {
+    return await chromium.launch({ ...options, channel: 'chrome' });
+  } catch {
+    console.warn(
+      'Google Chrome não encontrado. Abrindo o Chromium do Playwright.',
+    );
+    return await chromium.launch(options);
+  }
+}
+
 async function ensureBrowser() {
   if (!browser || !browser.isConnected()) {
-    const headless = process.env.HEADLESS !== 'false';
-    browser = await chromium.launch({ headless });
+    browser = await launchBrowser();
   }
 
   return browser;

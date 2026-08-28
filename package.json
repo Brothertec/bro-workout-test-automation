@@ -4,8 +4,10 @@
   "description": "Automação de testes E2E do Bro Workout com Playwright e Cucumber",
   "private": true,
   "scripts": {
-    "test": "cucumber-js",
+    "test": "cross-env HEADLESS=false cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
+    "test:headless": "cross-env HEADLESS=true cucumber-js",
+    "test:tags": "cross-env HEADLESS=false cucumber-js --tags",
     "install:browsers": "playwright install chromium",
     "postinstall": "playwright install chromium"
   },
