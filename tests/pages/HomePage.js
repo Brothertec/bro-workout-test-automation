@@ -49,6 +49,10 @@ class HomePage extends BasePage {
   async goToExercises() {
     await this.viewExercisesLink.click();
   }
+
+  async goToExercisesNavBar() {
+    await this.navBar.getByText('Exercícios').click();
+  }
 }
 
 module.exports = { HomePage };
