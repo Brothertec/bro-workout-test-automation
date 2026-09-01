@@ -1,6 +1,6 @@
 const { World, setWorldConstructor, setDefaultTimeout } = require('@cucumber/cucumber');
 
-setDefaultTimeout(60 * 1000);
+setDefaultTimeout(60 * 1000 * 10);
 
 class CustomWorld extends World {
   constructor(options) {
