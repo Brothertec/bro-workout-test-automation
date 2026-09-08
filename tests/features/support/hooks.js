@@ -19,9 +19,13 @@ async function launchBrowser() {
   const options = {
     headless,
     slowMo: headless ? 0 : 250,
-    args: ['--start-maximized'],
+    args: headless ? [] : ['--start-maximized'],
   };
 
+  if (process.env.CI === 'true') {
+    return chromium.launch(options);
+  }
+   
   try {
     return await chromium.launch({ ...options, channel: 'chrome' });
   } catch {
@@ -47,12 +51,22 @@ BeforeAll(async function () {
 Before(async function () {
   await ensureBrowser();
 
+  const headless = isHeadless();
   this.context = await browser.newContext({
     baseURL: process.env.BASE_URL,
     locale: 'pt-BR',
-    viewport: { width: 1280, height: 720 },
+    viewport: headless ? { width: 1280, height: 720 } : null,
   });
   this.page = await this.context.newPage();
+
+  if (!headless) {
+    const session = await this.context.newCDPSession(this.page);
+    const { windowId } = await session.send('Browser.getWindowForTarget');
+    await session.send('Browser.setWindowBounds', {
+      windowId,
+      bounds: { windowState: 'maximized' },
+    });
+  }
 
   this.homePage = new HomePage(this.page);
   this.usersPage = new UsersPage(this.page);
