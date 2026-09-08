@@ -17,6 +17,10 @@ class UsersPage extends BasePage {
     this.series = this.modal.getByLabel('Séries');
     this.weight = this.modal.getByLabel('Peso (kg)');
     this.addWorkoutButton = this.modal.getByText('Adicionar Treino');
+    this.userName = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' });
+    this.userEmail = this.table.getByRole('gridcell', { name: 'TESTSD' });
+    this.trainings = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' }).locator('..').locator('span');
+    this.buttons = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' }).locator('..').locator('button');
     this.nameColumn = page.getByRole('columnheader', { name: 'Nome' });
     this.emailColumn = page.getByRole('columnheader', { name: 'Email' });
     this.workoutsColumn = page.getByRole('columnheader', { name: 'Treinos' });
