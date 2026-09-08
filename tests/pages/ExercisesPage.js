@@ -22,6 +22,8 @@ class ExercisesPage extends BasePage {
       exact: true
     });
     this.createExerciseModal = page.getByRole('dialog');
+    this.editButton = page.getByRole('button', { name: 'Editar' });
+    this.deleteButton = page.getByRole('button', { name: 'Deletar' });
   }
 
   async goto() {
