@@ -59,11 +59,6 @@ class ExercisesPage extends BasePage {
     });
   }
 
-  // TODO: Mover para BasePage
-  async clickButton(buttonText) {
-    await this.page.getByRole('button', {name: `${buttonText}`}).click();
-  }
-
   async warningFailVerify() {
     await expect(this.createExerciseModal.getByText('Falha ao criar exercício')).toBeVisible();
   }

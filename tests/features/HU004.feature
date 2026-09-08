@@ -13,7 +13,8 @@ Feature: @HU004 - Exercises
 
     @HU004.3 @regression
     Scenario: 03 Do not display the video link for an exercise without a video
-        Given I access the exercises page from the home page
-        When I create an exercise without a video
-        Then I should see the created exercise in the exercises list
-        And the created exercise should not display the "Assistir Vídeo" link
+        Given The user accesses the exercises page from the home page
+        When The user creates an exercise without a video
+        Then The user should see the created exercise in the exercises list
+        And The created exercise should not display the "Assistir Vídeo" link
+        
