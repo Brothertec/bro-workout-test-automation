@@ -18,8 +18,10 @@ class ExercisesPage extends BasePage {
       name: 'Criar',
       exact: true
     });
+    this.exerciseImageUrlInput = this.exerciseCreationModal.getByLabel('URL da Imagem (opcional)', {
+      exact: true
+    });
     this.createExerciseModal = page.getByRole('dialog');
-    this.exerciseList = page.locator(".MuiList-root.MuiList-padding.css-1wduhak");
     this.editButton = page.getByRole('button', { name: 'Editar' });
     this.deleteButton = page.getByRole('button', { name: 'Deletar' });
   }
@@ -55,6 +57,20 @@ class ExercisesPage extends BasePage {
   getVideoLinkForExercise(name) {
     return this.getExerciseByName(name).getByRole('link', {
       name: 'Assistir Vídeo',
+      exact: true,
+    });
+  }
+
+  async fillExerciseImageUrl(imageUrl) {
+    await this.exerciseImageUrlInput.fill(imageUrl);
+  }
+
+  getImageForExercise(name) {
+    return this.getExerciseByName(name).locator('img');
+  }
+
+  getNameForExercise(name) {
+    return this.getExerciseByName(name).getByText(name, {
       exact: true,
     });
   }
