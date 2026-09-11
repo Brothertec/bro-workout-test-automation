@@ -1,0 +1,64 @@
+name: E2E
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Cucumber tags'
+        required: false
+        default: ''
+        type: string
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cucumber:
+    name: Playwright + Cucumber
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: true
+      HEADLESS: 'true'
+      BASE_URL: ${{ vars.BASE_URL || 'https://bro-workout-frontend.vercel.app' }}
+      CUCUMBER_TAGS: ${{ github.event.inputs.tags }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: |
+          if [ -n "$CUCUMBER_TAGS" ]; then
+            npm run test:headless -- --tags "$CUCUMBER_TAGS"
+          else
+            npm run test:headless
+          fi
+
+      - name: Upload Cucumber report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 15
