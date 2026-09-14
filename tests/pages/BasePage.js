@@ -17,6 +17,14 @@ class BasePage {
   async url() {
     return this.page.url();
   }
+
+  async buttonClickByText(text) {
+    await this.page.getByText(text).click();
+  }
+
+  async buttonClickByRole(role, name) {
+    await this.page.getByRole(role, { name: name }).click();
+  }
 }
 
 module.exports = { BasePage };
