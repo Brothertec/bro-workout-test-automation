@@ -7,7 +7,7 @@ Given('I access the exercises page from the home page', async function () {
     await this.exercisesPage.waitUntilLoaded();
 });
 
-Given('the user accesses the exercises page from the home page', async function () {
+Given('The user accesses the exercises page from the home page', async function () {
     await this.homePage.goto();
     await this.homePage.goToExercises();
     await this.exercisesPage.waitUntilLoaded();
@@ -25,7 +25,7 @@ Then('I should see the created exercise in the exercises list', async function (
     await expect(createdExercise).toBeVisible();
 });
 
-Then('the user should see the created exercise in the exercises list', async function () {
+Then('The user should see the created exercise in the exercises list', async function () {
     const createdExercise = this.exercisesPage.getExerciseByName(this.createdExerciseName);
     await expect(createdExercise).toBeVisible();
 });
@@ -35,7 +35,7 @@ Then('the created exercise should not display the "Assistir Vídeo" link', async
     await expect(videoLink).toHaveCount(0);
 });
 
-When('the user creates an exercise with an image', async function () {
+When('The user creates an exercise with an image', async function () {
     this.createdExerciseName = `Exercício com imagem ${Date.now()}`;
     this.createdExerciseImageUrl = 'https://placehold.co/120x120.png';
     await this.exercisesPage.openExerciseCreationModal();
@@ -44,7 +44,7 @@ When('the user creates an exercise with an image', async function () {
     await this.exercisesPage.createExercise();
 });
 
-Then('the registered image should be displayed to the left of the created exercise name', async function () {
+Then('The registered image should be displayed to the left of the created exercise name', async function () {
     const exerciseImage = this.exercisesPage.getImageForExercise(this.createdExerciseName);
     const exerciseName = this.exercisesPage.getNameForExercise(this.createdExerciseName);
     const imagePosition = await exerciseImage.boundingBox();
