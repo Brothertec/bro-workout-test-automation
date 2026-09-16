@@ -9,6 +9,24 @@ class UsersPage extends BasePage {
     super(page);
     this.heading = page.getByRole('heading', { name: 'Usuários', level: 1 });
     this.table = page.getByRole('grid');
+    this.addUserButton = page.getByRole('button', {
+      name: 'Adicionar Usuário',
+      exact: true,
+    });
+    this.userCreationModal = page.getByRole('dialog');
+    this.userNameInput = this.userCreationModal.getByLabel('Nome', {
+      exact: true,
+    });
+    this.userEmailInput = this.userCreationModal.getByLabel('Email', {
+      exact: true,
+    });
+    this.userPasswordInput = this.userCreationModal.getByLabel('Senha', {
+      exact: true,
+    });
+    this.createUserButton = this.userCreationModal.getByRole('button', {
+      name: 'Criar',
+      exact: true,
+    });
     this.userName = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' });
     this.userEmail = this.table.getByRole('gridcell', { name: 'TESTSD' });
     this.trainings = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' }).locator('..').locator('span')
@@ -28,6 +46,43 @@ class UsersPage extends BasePage {
     await this.page.waitForURL('**/users');
     await this.heading.waitFor();
     await this.table.waitFor();
+  }
+
+  async openUserCreationForm() {
+    await this.addUserButton.click();
+    await this.userCreationModal.waitFor();
+  }
+
+  async fillUserFormWithout(field) {
+    if (field !== 'name') {
+      await this.userNameInput.fill('Usuário Automação');
+    }
+
+    if (field !== 'email') {
+      await this.userEmailInput.fill(
+        `usuario.automacao.${Date.now()}@email.com`,
+      );
+    }
+
+    if (field !== 'password') {
+      await this.userPasswordInput.fill('Senha123!');
+    }
+  }
+
+  async submitUserCreationForm() {
+    await this.createUserButton.click();
+  }
+
+  async requiredMessageShouldBeVisibleBelowField(field, message) {
+    const fieldContainers = {
+      name: this.userNameInput.locator('xpath=../..'),
+      email: this.userEmailInput.locator('xpath=../..'),
+      password: this.userPasswordInput.locator('xpath=../..'),
+    };
+
+    await expect(
+      fieldContainers[field].getByText(message, { exact: true }),
+    ).toBeVisible();
   }
 
   async userVerify() {
