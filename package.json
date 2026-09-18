@@ -7,16 +7,29 @@
     "test": "cross-env HEADLESS=false cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
     "test:headless": "cross-env HEADLESS=true cucumber-js",
-    "test:tags": "cross-env HEADLESS=false cucumber-js --tags",
+    "test:bugs": "cross-env HEADLESS=false cucumber-js --profile bugs",
+    "test:all": "cross-env HEADLESS=false cucumber-js --profile all",
+    "test:tags": "cross-env HEADLESS=false cucumber-js --profile all --tags",
     "install:browsers": "playwright install chromium",
-    "postinstall": "playwright install chromium"
+    "postinstall": "playwright install chromium",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.3.0",
+    "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.55.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.6.1",
+    "eslint": "^10.10.0",
+    "globals": "^17.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
     "playwright": "^1.55.0"
   }
 }
