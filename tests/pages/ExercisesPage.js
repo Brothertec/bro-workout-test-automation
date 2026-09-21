@@ -21,6 +21,10 @@ class ExercisesPage extends BasePage {
     this.exerciseImageUrlInput = this.exerciseCreationModal.getByLabel('URL da Imagem (opcional)', {
       exact: true
     });
+    this.exerciseVideoUrlInput = this.exerciseCreationModal.getByLabel(
+      'URL do Vídeo (opcional)',
+      { exact: true },
+    );
     this.createExerciseModal = page.getByRole('dialog');
     this.editButton = page.getByRole('button', { name: 'Editar' });
     this.deleteButton = page.getByRole('button', { name: 'Deletar' });
@@ -63,6 +67,10 @@ class ExercisesPage extends BasePage {
 
   async fillExerciseImageUrl(imageUrl) {
     await this.exerciseImageUrlInput.fill(imageUrl);
+  }
+
+  async fillExerciseVideoUrl(videoUrl) {
+    await this.exerciseVideoUrlInput.fill(videoUrl);
   }
 
   getImageForExercise(name) {

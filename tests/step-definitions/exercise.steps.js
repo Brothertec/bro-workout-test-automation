@@ -7,10 +7,12 @@ Given('I access the exercises page from the home page', async function () {
     await this.exercisesPage.waitUntilLoaded();
 });
 
-Given('The user accesses the exercises page from the home page', async function () {
-    await this.homePage.goto();
-    await this.homePage.goToExercises();
-    await this.exercisesPage.waitUntilLoaded();
+Given('The user navigates to {string} page', async function (page) {
+  if (page !== 'exercises') {
+    throw new Error(`Unsupported page: ${page}`);
+  }
+
+  await this.exercisesPage.goto();
 });
 
 When('I create an exercise without a video', async function () {
@@ -25,7 +27,7 @@ Then('I should see the created exercise in the exercises list', async function (
     await expect(createdExercise).toBeVisible();
 });
 
-Then('The user should see the created exercise in the exercises list', async function () {
+Then('The new exercise should be displayed on the list', async function () {
     const createdExercise = this.exercisesPage.getExerciseByName(this.createdExerciseName);
     await expect(createdExercise).toBeVisible();
 });
@@ -35,14 +37,31 @@ Then('the created exercise should not display the "Assistir Vídeo" link', async
     await expect(videoLink).toHaveCount(0);
 });
 
-When('The user creates an exercise with an image', async function () {
-    this.createdExerciseName = `Exercício com imagem ${Date.now()}`;
-    this.createdExerciseImageUrl = 'https://placehold.co/120x120.png';
-    await this.exercisesPage.openExerciseCreationModal();
-    await this.exercisesPage.fillExerciseName(this.createdExerciseName);
-    await this.exercisesPage.fillExerciseImageUrl(this.createdExerciseImageUrl);
-    await this.exercisesPage.createExercise();
-});
+When('The user creates an exercise with only an {string}', async function (mediaType) {
+        if (!['image', 'video'].includes(mediaType)) {
+            throw new Error(`Unsupported media type: ${mediaType}`);
+        }
+
+        this.createdExerciseName = `Exercício com ${mediaType} ${Date.now()}`;
+
+        await this.exercisesPage.openExerciseCreationModal();
+        await this.exercisesPage.fillExerciseName(this.createdExerciseName);
+
+        if (mediaType === 'image') {
+            this.createdExerciseImageUrl = 'https://placehold.co/120x120.png';
+            await this.exercisesPage.fillExerciseImageUrl(
+                this.createdExerciseImageUrl,
+            );
+        } else {
+            this.createdExerciseVideoUrl = 'https://www.youtube.com/shorts/6IniK7x8I1A';
+            await this.exercisesPage.fillExerciseVideoUrl(
+                this.createdExerciseVideoUrl,
+            );
+        }
+
+        await this.exercisesPage.createExercise();
+    },
+);
 
 Then('The registered image should be displayed to the left of the created exercise name', async function () {
     const exerciseImage = this.exercisesPage.getImageForExercise(this.createdExerciseName);
