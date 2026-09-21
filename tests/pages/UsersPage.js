@@ -75,9 +75,15 @@ class UsersPage extends BasePage {
 
   async requiredMessageShouldBeVisibleBelowField(field, message) {
     const fieldContainers = {
-      name: this.userNameInput.locator('xpath=../..'),
-      email: this.userEmailInput.locator('xpath=../..'),
-      password: this.userPasswordInput.locator('xpath=../..'),
+      name: this.userCreationModal.locator(
+        '.MuiFormControl-root:has(input[type="text"])',
+      ),
+      email: this.userCreationModal.locator(
+        '.MuiFormControl-root:has(input[type="email"])',
+      ),
+      password: this.userCreationModal.locator(
+        '.MuiFormControl-root:has(input[type="password"])',
+      ),
     };
 
     await expect(
