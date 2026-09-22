@@ -14,23 +14,22 @@ class UsersPage extends BasePage {
       name: 'Adicionar Usuário',
       exact: true,
     });
-    this.userCreationModal = page.getByRole('dialog');
-    this.userNameInput = this.userCreationModal.getByLabel('Nome', {
+    this.modal = page.getByRole('dialog');
+    this.userNameInput = this.modal.getByLabel('Nome', {
       exact: true,
     });
-    this.userEmailInput = this.userCreationModal.getByLabel('Email', {
+    this.userEmailInput = this.modal.getByLabel('Email', {
       exact: true,
     });
-    this.userPasswordInput = this.userCreationModal.getByLabel('Senha', {
+    this.userPasswordInput = this.modal.getByLabel('Senha', {
       exact: true,
     });
-    this.createUserButton = this.userCreationModal.getByRole('button', {
+    this.createUserButton = this.modal.getByRole('button', {
       name: 'Criar',
       exact: true,
     });
 
     this.nextPageButton = page.getByLabel('Go to next page');
-    this.modal = page.getByRole('dialog');
     this.workoutName = this.modal.getByLabel('Nome do Treino');
     this.reps = this.modal.getByLabel('Repetições');
     this.series = this.modal.getByLabel('Séries');
@@ -55,7 +54,7 @@ class UsersPage extends BasePage {
 
   async openUserCreationForm() {
     await this.addUserButton.click();
-    await this.userCreationModal.waitFor();
+    await this.modal.waitFor();
   }
 
   async fillUserFormWithout(field) {
@@ -80,13 +79,13 @@ class UsersPage extends BasePage {
 
   async requiredMessageShouldBeVisibleBelowField(field, message) {
     const fieldContainers = {
-      name: this.userCreationModal.locator(
+      name: this.modal.locator(
         '.MuiFormControl-root:has(input[type="text"])',
       ),
-      email: this.userCreationModal.locator(
+      email: this.modal.locator(
         '.MuiFormControl-root:has(input[type="email"])',
       ),
-      password: this.userCreationModal.locator(
+      password: this.modal.locator(
         '.MuiFormControl-root:has(input[type="password"])',
       ),
     };
