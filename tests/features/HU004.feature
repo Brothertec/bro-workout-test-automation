@@ -1,12 +1,12 @@
 @HU004
 Feature: @HU004 - Exercises
 
-    @HU004.1 @regression
+    @HU004.1 @bug
     Scenario: 01 Verify the edit button is displayed
         When The user is on the "Exercises" page
         Then The "Edit" button is displayed on the exercises grid
 
-    @HU004.2 @regression
+    @HU004.2 @bug
     Scenario: 02 Verify the delete button is displayed
         When The user is on the "Exercises" page
         Then The "Delete" button is displayed on the exercises grid
