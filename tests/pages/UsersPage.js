@@ -10,8 +10,26 @@ class UsersPage extends BasePage {
     super(page);
     this.heading = page.getByRole('heading', { name: 'Usuários', level: 1 });
     this.table = page.getByRole('grid');
-    this.nextPageButton = page.getByLabel('Go to next page');
+    this.addUserButton = page.getByRole('button', {
+      name: 'Adicionar Usuário',
+      exact: true,
+    });
     this.modal = page.getByRole('dialog');
+    this.userNameInput = this.modal.getByLabel('Nome', {
+      exact: true,
+    });
+    this.userEmailInput = this.modal.getByLabel('Email', {
+      exact: true,
+    });
+    this.userPasswordInput = this.modal.getByLabel('Senha', {
+      exact: true,
+    });
+    this.createUserButton = this.modal.getByRole('button', {
+      name: 'Criar',
+      exact: true,
+    });
+
+    this.nextPageButton = page.getByLabel('Go to next page');
     this.workoutName = this.modal.getByLabel('Nome do Treino');
     this.reps = this.modal.getByLabel('Repetições');
     this.series = this.modal.getByLabel('Séries');
@@ -36,6 +54,49 @@ class UsersPage extends BasePage {
     await this.page.waitForURL('**/users');
     await this.heading.waitFor();
     await this.table.waitFor();
+  }
+
+  async openUserCreationForm() {
+    await this.addUserButton.click();
+    await this.modal.waitFor();
+  }
+
+  async fillUserFormWithout(field) {
+    if (field !== 'name') {
+      await this.userNameInput.fill('Usuário Automação');
+    }
+
+    if (field !== 'email') {
+      await this.userEmailInput.fill(
+        `usuario.automacao.${Date.now()}@email.com`,
+      );
+    }
+
+    if (field !== 'password') {
+      await this.userPasswordInput.fill('Senha123!');
+    }
+  }
+
+  async submitUserCreationForm() {
+    await this.createUserButton.click();
+  }
+
+  async requiredMessageShouldBeVisibleBelowField(field, message) {
+    const fieldContainers = {
+      name: this.modal.locator(
+        '.MuiFormControl-root:has(input[type="text"])',
+      ),
+      email: this.modal.locator(
+        '.MuiFormControl-root:has(input[type="email"])',
+      ),
+      password: this.modal.locator(
+        '.MuiFormControl-root:has(input[type="password"])',
+      ),
+    };
+
+    await expect(
+      fieldContainers[field].getByText(message, { exact: true }),
+    ).toBeVisible();
   }
 
   async userVerify(userName, userEmail, userId) {
