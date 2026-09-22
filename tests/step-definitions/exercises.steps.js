@@ -1,5 +1,4 @@
 const { When, Then } = require('@cucumber/cucumber');
-const { expect } = require('@playwright/test');
 
 When('The user clicks on the button {string}', async function(buttonText) {
     await this.exercisesPage.buttonClickByText(buttonText);
