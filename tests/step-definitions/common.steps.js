@@ -15,7 +15,7 @@ Given('The user navigates to {string} page', async function (page) {
     }
 });
 
-When('The user navigates to the {string} page through the {string}', async function (page, button) {
+When('The user navigates to {string} page through the {string}', async function (page, button) {
     switch (button) {
         case 'card':
             switch (page) {
