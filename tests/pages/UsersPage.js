@@ -41,6 +41,11 @@ class UsersPage extends BasePage {
     this.emailColumn = page.getByRole('columnheader', { name: 'Email' });
     this.workoutsColumn = page.getByRole('columnheader', { name: 'Treinos' });
     this.actionsColumn = page.getByRole('columnheader', { name: 'Ações' });
+    this.threeDotsButtonEmail = page.getByLabel('Email column menu');
+    this.threeDotsButtonNome = page.getByLabel('Nome column menu');
+    this.gridCell = this.table.getByRole('gridcell');
+    this.buttonSortEmail = this.emailColumn.getByRole('button', { name: 'Sort' });
+    this.buttonSortNome = this.nameColumn.getByRole('button', { name: 'Sort' });
   }
 
   async goto() {
@@ -108,9 +113,9 @@ class UsersPage extends BasePage {
     await this.addWorkout(userId, 3);
     await this.page.reload();
     await this.waitUntilLoaded();
-    if(userEmail === undefined){
+    if (userEmail === undefined) {
       throw new Error(' User not found');
-    } else{
+    } else {
       await this.findUserByEmailFilter(userEmail);
     }
     if (await this.page.getByText(userEmail).isVisible()) {
@@ -195,20 +200,125 @@ class UsersPage extends BasePage {
     await this.buttonClickByText('Adicionar Treino');
   }
 
-  async findUserByEmail(userEmail){
+  async findUserByEmail(userEmail) {
     while (await this.page.getByText(userEmail).isVisible() !== true) {
       await this.nextPageButton.click();
     };
   }
 
-  async findUserByEmailFilter(userEmail){
+  async findUserByEmailFilter(userEmail) {
     await this.emailColumn.hover();
     await this.threeDotsButtonEmail.click();
     await this.page.getByText('Filter').click();
     await this.inputFilter.fill(userEmail);
     await expect(this.table.getByRole('gridcell', { name: userEmail })).toBeVisible();
     await this.page.keyboard.press('Escape');
+  }
+  async clickThreeDotsButton(columnName) {
+    if (columnName === 'Nome') {
+      await this.nameColumn.hover();
+      await this.threeDotsButtonNome.click();
+    }
+    else if (columnName === 'Email') {
+      await this.emailColumn.hover();
+      await this.threeDotsButtonEmail.click();
+    }
+  }
+  async getColumnGrid(columnName) {
+    const linhasTabela = await this.gridCell.count();
+    let cellColumn = [];
+    let startIndex;
+    if (columnName === 'Nome') {
+      startIndex = 0;
+    } else if (columnName === 'Email') {
+      startIndex = 1;
+    }
+    for (let i = startIndex; i < linhasTabela; i += 4) {
+      cellColumn.push(
+        await this.gridCell.nth(i).textContent()
+      );
+    }
+    return cellColumn;
+  }
+  async verifySortGridCell(buttonName, columnName, linhasTabela, cellColumn, buttonSort) {
+    let colunaAtual = await this.getColumnGrid(cellColumn);
+    let newColumn = [];
+    if (buttonName === 'Sort By ASC' || buttonSort === 'Ascending') {
+      if (columnName === 'Nome') {
+        for (let i = 0; i < linhasTabela; i += 4) {
+          newColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        const nameAsc = colunaAtual.sort();
+        expect(nameAsc).toEqual(newColumn);
 
+      } else if (columnName === 'Email') {
+        for (let i = 1; i < linhasTabela; i += 4) {
+          newColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        const emailAsc = colunaAtual.sort();
+        expect(emailAsc).toEqual(newColumn);
+      }
+    }
+    if (buttonName === 'Sort By DESC'|| buttonSort === 'Descending') {
+      if (columnName === 'Nome') {
+        for (let i = 0; i < linhasTabela; i += 4) {
+          newColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        const nameDesc = colunaAtual.sort().reverse();
+        expect(nameDesc).toEqual(newColumn);
+
+      } else if (columnName === 'Email') {
+        for (let i = 1; i < linhasTabela; i += 4) {
+          newColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        const emailDesc = colunaAtual.sort().reverse();
+        expect(emailDesc).toEqual(newColumn);
+      }
+    }
+    if (buttonName !== 'Sort By DESC' && buttonName !== 'Sort By ASC'|| buttonSort !== 'Ascending' && buttonSort !== 'Descending') {
+      let unsortColumn = [];
+      if (columnName === 'Nome') {
+        for (let i = 0; i < linhasTabela; i += 4) {
+          unsortColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        expect(unsortColumn).toEqual(colunaAtual);
+      } else if (columnName === 'Email') {
+        for (let i = 1; i < linhasTabela; i += 4) {
+          unsortColumn.push(await this.gridCell.nth(i).textContent());
+        }
+        expect(unsortColumn).toEqual(colunaAtual);
+      }
+    }
+  }
+  async clickOnButtonSort(columnName, buttonSort) {
+    if (columnName === 'Nome') {
+      await this.nameColumn.hover();
+      if (buttonSort === 'Ascending') {
+        await this.buttonSortNome.click();
+      } else if (buttonSort === 'Descending') {
+        await this.buttonSortNome.click();
+        await this.buttonSortNome.click();
+      }
+      else {
+        await this.buttonSortNome.click();
+        await this.buttonSortNome.click();
+        await this.buttonSortNome.click();
+      }
+    }
+    else if (columnName === 'Email') {
+      await this.emailColumn.hover();
+      if (buttonSort === 'Ascending') {
+        await this.buttonSortEmail.click();
+      } else if (buttonSort === 'Descending') {
+        await this.buttonSortEmail.click();
+        await this.buttonSortEmail.click();
+      }
+      else {
+        await this.buttonSortEmail.click();
+        await this.buttonSortEmail.click();
+        await this.buttonSortEmail.click();
+      }
+    }
   }
 }
 

@@ -2,11 +2,10 @@
    @EV001
 Feature: EV001 - Users
 
-    @EV001.1 @skip
-    #Test Case with skip tag: step to be implemented
+    @EV001.1 @regression
     Scenario Outline: 01 Should sort the users in the grid
         Given The user navigates to "users" page
-        When The user click on "<buttonName>" button on column "name"
+        When The user click on "<buttonName>" button on column "Nome"
         Then The users in the grid are displayed in the new order
         Examples:
             | buttonName   |
@@ -14,11 +13,10 @@ Feature: EV001 - Users
             | Sort By DESC |
             | Unsort       |
 
-    @EV001.2 @skip
-    #Test Case with skip tag: step to be implemented
+    @EV001.2 @regression
     Scenario Outline: 02 Should filter the users in the grid
         Given The user navigates to "users" page
-        When The user click on "<buttonName>" button on column "email"
+        When The user click on "<buttonName>" button on column "Email"
         Then The users in the grid are displayed in the new order
         Examples:
             | buttonName   |
@@ -26,11 +24,10 @@ Feature: EV001 - Users
             | Sort By DESC |
             | Unsort       |
 
-    @EV001.3 @skip
-    #Test Case with skip tag: step to be implemented
+    @EV001.3 @regression
     Scenario Outline: 03 Sort the users in the grid using the "sort" button
         Given The user navigates to "users" page
-        When The user click on "<buttonSort>" button on column "Name"
+        When The user click on "<buttonSort>" button sort on column "Nome"
         Then The users in the grid are displayed in the new order
         Examples:
             | buttonSort |
@@ -38,11 +35,10 @@ Feature: EV001 - Users
             | Descending |
             | Unsort     |
 
-    @EV001.4 @skip
-    #Test Case with skip tag: step to be implemented
+    @EV001.4 @regression
     Scenario Outline: 04 Sort the users in the grid using the "sort" button
         Given The user navigates to "users" page
-        When The user click on "<buttonSort>" button on column "Email"
+        When The user click on "<buttonSort>" button sort on column "Email"
         Then The users in the grid are displayed in the new order
         Examples:
             | buttonSort |
