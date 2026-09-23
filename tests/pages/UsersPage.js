@@ -14,7 +14,12 @@ class UsersPage extends BasePage {
       name: 'Adicionar Usuário',
       exact: true,
     });
+    this.nextPageButton = page.getByLabel('Go to next page');
+    this.threeDotsButtonEmail = page.getByLabel('Email column menu');
+    this.inputFilter = page.getByPlaceholder('Filter');
+    // ta errado, no actions nao aparece o dialog
     this.modal = page.getByRole('dialog');
+    // ta errado, no actions nao aparece o dialog
     this.userNameInput = this.modal.getByLabel('Nome', {
       exact: true,
     });
@@ -28,17 +33,15 @@ class UsersPage extends BasePage {
       name: 'Criar',
       exact: true,
     });
-
     this.nextPageButton = page.getByLabel('Go to next page');
-    this.workoutName = this.modal.getByLabel('Nome do Treino');
+    //
+    this.workoutName = page.getByRole('textbox', { name: 'Nome do Treino' });
+    // this.workoutName = this.modal.getByLabel('Nome do Treino');
+    //
     this.reps = this.modal.getByLabel('Repetições');
     this.series = this.modal.getByLabel('Séries');
     this.weight = this.modal.getByLabel('Peso (kg)');
     this.addWorkoutButton = this.modal.getByText('Adicionar Treino');
-    this.userName = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' });
-    this.userEmail = this.table.getByRole('gridcell', { name: 'TESTSD' });
-    this.trainings = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' }).locator('..').locator('span');
-    this.buttons = this.table.getByRole('gridcell', { name: 'DSADHASIOUDHIA' }).locator('..').locator('button');
     this.nameColumn = page.getByRole('columnheader', { name: 'Nome' });
     this.emailColumn = page.getByRole('columnheader', { name: 'Email' });
     this.workoutsColumn = page.getByRole('columnheader', { name: 'Treinos' });
@@ -52,8 +55,15 @@ class UsersPage extends BasePage {
 
   async waitUntilLoaded() {
     await this.page.waitForURL('**/users');
+    await this.waitForGridReady();
+  }
+
+  async waitForGridReady() {
     await this.heading.waitFor();
     await this.table.waitFor();
+    await this.table.getByRole('row').nth(1).waitFor(
+      { state: 'visible' },
+    );
   }
 
   async openUserCreationForm() {
@@ -102,11 +112,11 @@ class UsersPage extends BasePage {
   async userVerify(userName, userEmail, userId) {
     await this.addWorkout(userId, 3);
     await this.page.reload();
+    await this.waitUntilLoaded();
     if(userEmail === undefined){
       throw new Error(' User not found');
     } else{
-      // mudar metodo de findByEmail para Filter
-      await this.findUserByEmail(userEmail);
+      await this.findUserByEmailFilter(userEmail);
     }
     if (await this.page.getByText(userEmail).isVisible()) {
       await expect(this.table.getByRole('gridcell', { name: userName })).toBeVisible();
@@ -132,7 +142,8 @@ class UsersPage extends BasePage {
 
   async createWorkoutClick(userEmail) {
     await this.page.reload();
-    await this.findUserByEmail(userEmail);
+    await this.page.waitForTimeout(5000);
+    await this.findUserByEmailFilter(userEmail);
     if (await this.page.getByText(userEmail).isVisible()) {
       await this.table.getByRole('gridcell', { name: userEmail }).locator('..').getByLabel('Adicionar Treino').click();
     }
@@ -177,8 +188,14 @@ class UsersPage extends BasePage {
   }
 
   async fillFormWorkout(workoutName, exercise, reps, series, weight) {
-    await expect(this.modal).toBeVisible();
+    //
+    await this.page.waitForTimeout(5000);
+    // await this.page.pause();
+    // await expect(this.modal).toBeVisible();
+    //
+    //
     await this.workoutName.fill(workoutName);
+    //
     await this.buttonClickByRole('combobox', '');
     await this.buttonClickByText(exercise);
     await this.reps.fill(reps);
@@ -190,11 +207,18 @@ class UsersPage extends BasePage {
     await this.buttonClickByText('Adicionar Treino');
   }
 
-  // mudar metodo de findByEmail para Filter
   async findUserByEmail(userEmail){
     while (await this.page.getByText(userEmail).isVisible() != true) {
       await this.nextPageButton.click();
     };
+  }
+
+  async findUserByEmailFilter(userEmail){
+    await this.emailColumn.hover();
+    await this.threeDotsButtonEmail.click();
+    await this.page.getByText('Filter').click();
+    await this.inputFilter.fill(userEmail);
+    await this.page.keyboard.press('Escape');
   }
 }
 

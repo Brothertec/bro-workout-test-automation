@@ -55,7 +55,7 @@ Before(async function () {
   this.context = await browser.newContext({
     baseURL: process.env.BASE_URL,
     locale: 'pt-BR',
-    viewport: headless ? { width: 1280, height: 720 } : null,
+    viewport: headless ? { width: 1920, height: 1080 } : null,
   });
   this.page = await this.context.newPage();
 
