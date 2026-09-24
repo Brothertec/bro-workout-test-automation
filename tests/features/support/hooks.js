@@ -1,5 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const { BeforeAll, Before, After, AfterAll, Status } = require('@cucumber/cucumber');
 const { chromium } = require('playwright');
+const playwrightConfig = require('../../../playwright.config');
 const { HomePage } = require('../../pages/HomePage');
 const { UsersPage } = require('../../pages/UsersPage');
 const { ExercisesPage } = require('../../pages/ExercisesPage');
@@ -68,16 +71,36 @@ Before(async function () {
     });
   }
 
+  this.tracingStarted = Boolean(
+    playwrightConfig.use?.trace && playwrightConfig.use.trace !== 'off',
+  );
+  if (this.tracingStarted) {
+    await this.context.tracing.start({
+      screenshots: true,
+      snapshots: true,
+      sources: true,
+    });
+  }
+
   this.homePage = new HomePage(this.page);
   this.usersPage = new UsersPage(this.page);
   this.exercisesPage = new ExercisesPage(this.page);
   this.headerPage = new HeaderPage(this.page);
 });
 
-After(async function ({ result }) {
+After(async function ({ pickle, result }) {
   if (result?.status === Status.FAILED && this.page) {
     const screenshot = await this.page.screenshot({ fullPage: true });
     await this.attach(screenshot, 'image/png');
+  }
+
+  if (this.tracingStarted && this.context) {
+    const outputDir = playwrightConfig.outputDir || 'test-results';
+    const traceName = (pickle?.name || 'scenario').replace(/[^\w.-]+/g, '_');
+    fs.mkdirSync(outputDir, { recursive: true });
+    await this.context.tracing.stop({
+      path: path.join(outputDir, `${traceName}.zip`),
+    });
   }
 
   await this.context?.close();
