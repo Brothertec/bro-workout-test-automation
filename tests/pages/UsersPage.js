@@ -17,9 +17,7 @@ class UsersPage extends BasePage {
     this.nextPageButton = page.getByLabel('Go to next page');
     this.threeDotsButtonEmail = page.getByLabel('Email column menu');
     this.inputFilter = page.getByPlaceholder('Filter');
-    // ta errado, no actions nao aparece o dialog
     this.modal = page.getByRole('dialog');
-    // ta errado, no actions nao aparece o dialog
     this.userNameInput = this.modal.getByLabel('Nome', {
       exact: true,
     });
@@ -34,10 +32,7 @@ class UsersPage extends BasePage {
       exact: true,
     });
     this.nextPageButton = page.getByLabel('Go to next page');
-    //
-    this.workoutName = page.getByRole('textbox', { name: 'Nome do Treino' });
-    // this.workoutName = this.modal.getByLabel('Nome do Treino');
-    //
+    this.workoutName = this.modal.getByLabel('Nome do Treino');
     this.reps = this.modal.getByLabel('Repetições');
     this.series = this.modal.getByLabel('Séries');
     this.weight = this.modal.getByLabel('Peso (kg)');
@@ -142,7 +137,6 @@ class UsersPage extends BasePage {
 
   async createWorkoutClick(userEmail) {
     await this.page.reload();
-    await this.page.waitForTimeout(5000);
     await this.findUserByEmailFilter(userEmail);
     if (await this.page.getByText(userEmail).isVisible()) {
       await this.table.getByRole('gridcell', { name: userEmail }).locator('..').getByLabel('Adicionar Treino').click();
@@ -188,14 +182,8 @@ class UsersPage extends BasePage {
   }
 
   async fillFormWorkout(workoutName, exercise, reps, series, weight) {
-    //
-    await this.page.waitForTimeout(5000);
-    // await this.page.pause();
-    // await expect(this.modal).toBeVisible();
-    //
-    //
+    await expect(this.modal).toBeVisible();
     await this.workoutName.fill(workoutName);
-    //
     await this.buttonClickByRole('combobox', '');
     await this.buttonClickByText(exercise);
     await this.reps.fill(reps);
@@ -208,7 +196,7 @@ class UsersPage extends BasePage {
   }
 
   async findUserByEmail(userEmail){
-    while (await this.page.getByText(userEmail).isVisible() != true) {
+    while (await this.page.getByText(userEmail).isVisible() !== true) {
       await this.nextPageButton.click();
     };
   }
@@ -218,7 +206,9 @@ class UsersPage extends BasePage {
     await this.threeDotsButtonEmail.click();
     await this.page.getByText('Filter').click();
     await this.inputFilter.fill(userEmail);
+    await expect(this.table.getByRole('gridcell', { name: userEmail })).toBeVisible();
     await this.page.keyboard.press('Escape');
+
   }
 }
 
