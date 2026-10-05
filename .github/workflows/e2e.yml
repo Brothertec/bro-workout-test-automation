@@ -20,8 +20,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  api:
+    name: API
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run API tests
+        run: npm run test:api
+
   cucumber:
     name: Playwright + Cucumber
+    needs: api
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
