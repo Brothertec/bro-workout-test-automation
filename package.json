@@ -10,6 +10,7 @@
     "test:bugs": "cross-env HEADLESS=false cucumber-js --profile bugs",
     "test:all": "cross-env HEADLESS=false cucumber-js --profile all",
     "test:tags": "cross-env HEADLESS=false cucumber-js --profile all --tags",
+    "test:api": "playwright test api --pass-with-no-tests",
     "install:browsers": "playwright install chromium",
     "postinstall": "playwright install chromium",
     "lint": "eslint .",
