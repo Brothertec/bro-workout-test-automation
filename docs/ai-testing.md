@@ -9,7 +9,10 @@ no VS Code, seguido da configuração dos agentes de testes.
 
 - Codex: servidor MCP reconhecido e navegação validada.
 - Claude Code: configuração criada; conexão ainda não validada.
-- Agentes planner, generator e healer: ainda não configurados.
+- Definições de planner, generator e healer geradas para Codex.
+- Planner validado: preparação pelo seed e salvamento do plano.
+- Generator validado: três testes smoke gerados e aprovados.
+- Healer: definição criada; funcionamento ainda não validado.
 - Versão do servidor MCP: `@playwright/mcp@latest`.
 - A definição de uma versão fixa está pendente.
 
@@ -27,6 +30,10 @@ separadamente a conexão.
 
 - `.codex/config.toml`: configuração do Playwright MCP para Codex.
 - `.mcp.json`: configuração do Playwright MCP para Claude Code.
+- `.codex/agents/`: definições dos agentes para Codex.
+- `seed.spec.ts`: preparação da página inicial para os agentes.
+- `specs/home-smoke.md`: plano usado no piloto.
+- O servidor `playwright-test` fornece as ferramentas específicas dos agentes.
 
 As configurações pessoais de cada desenvolvedor ficam fora do repositório.
 
@@ -65,14 +72,15 @@ A navegação funcionou após sua instalação na pasta Aplicativos.
 
 - Interface: Cucumber, cenários Gherkin, step definitions e Page Objects.
 - API: Playwright Test na pasta `api/`.
-- A pasta `e2e/` contém exemplos em Playwright Test.
+- A pasta `e2e/` contém exemplos e três testes smoke do piloto
+  do generator em Playwright Test.
 
 A configuração dos agentes deverá considerar esses formatos.
 Este setup não define uma migração dos testes existentes.
 
 ## Próximos passos
 
-- Validar o MCP no Claude Code.
-- Definir uma versão fixa do servidor.
-- Alinhar as instruções dos agentes com os padrões do projeto.
-- Configurar e validar planner, generator e healer.
+- Validar o MCP no Claude Code quando essa etapa for retomada.
+- Definir uma versão fixa do servidor MCP.
+- Revisar as instruções geradas dos agentes conforme os padrões do projeto.
+- Validar o healer em um cenário controlado.

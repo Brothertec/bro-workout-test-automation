@@ -59,8 +59,11 @@ Automação de testes do Bro Workout em JavaScript.
 - Geração: siga o formato de teste escolhido para a tarefa,
   reutilizando a estrutura existente.
 - Correção: investigue a causa e proponha a menor alteração necessária.
-- Estas orientações não significam que os agentes oficiais
-  planner, generator e healer já estejam configurados.
+- As definições dos agentes estão em `.codex/agents/`.
+- O piloto de interface em Playwright Test está limitado aos arquivos
+  `e2e/home-title.spec.ts`, `e2e/home-heading.spec.ts` e
+  `e2e/home-links.spec.ts`.
+- Essa exceção não autoriza migrar os testes Cucumber existentes.
 
 ## Execução e Git
 
