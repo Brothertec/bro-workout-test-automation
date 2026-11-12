@@ -61,8 +61,8 @@ Automação de testes do Bro Workout em JavaScript.
 - Correção: investigue a causa e proponha a menor alteração necessária.
 - As definições dos agentes estão em `.codex/agents/`.
 - O piloto de interface em Playwright Test está limitado aos arquivos
-  `e2e/home-title.spec.ts`, `e2e/home-heading.spec.ts` e
-  `e2e/home-links.spec.ts`.
+  `e2e/home-title.spec.ts`, `e2e/home-heading.spec.ts`,
+  `e2e/home-links.spec.ts` e `e2e/healer-pilot.spec.ts`.
 - Essa exceção não autoriza migrar os testes Cucumber existentes.
 
 ## Execução e Git

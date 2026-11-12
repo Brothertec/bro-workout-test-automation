@@ -12,7 +12,8 @@ no VS Code, seguido da configuração dos agentes de testes.
 - Definições de planner, generator e healer geradas para Codex.
 - Planner validado: preparação pelo seed e salvamento do plano.
 - Generator validado: três testes smoke gerados e aprovados.
-- Healer: definição criada; funcionamento ainda não validado.
+- Healer validado em falha controlada de seletor: h2 corrigido para h1,
+  preservando as verificações; um teste aprovado após a correção.
 - Versão do servidor MCP: `@playwright/mcp@latest`.
 - A definição de uma versão fixa está pendente.
 
@@ -83,4 +84,3 @@ Este setup não define uma migração dos testes existentes.
 - Validar o MCP no Claude Code quando essa etapa for retomada.
 - Definir uma versão fixa do servidor MCP.
 - Revisar as instruções geradas dos agentes conforme os padrões do projeto.
-- Validar o healer em um cenário controlado.
