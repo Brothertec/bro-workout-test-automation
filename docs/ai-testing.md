@@ -14,8 +14,9 @@ no VS Code, seguido da configuração dos agentes de testes.
 - Generator validado: três testes smoke gerados e aprovados.
 - Healer validado em falha controlada de seletor: h2 corrigido para h1,
   preservando as verificações; um teste aprovado após a correção.
-- Versão do servidor MCP: `@playwright/mcp@latest`.
-- A definição de uma versão fixa está pendente.
+- Versão fixada do servidor MCP: `@playwright/mcp@0.0.85`.
+- Conexão no Codex validada após fixar a versão: navegação em
+  https://example.com com título Example Domain.
 
 ## Pré-requisitos do setup validado
 
@@ -82,5 +83,4 @@ Este setup não define uma migração dos testes existentes.
 ## Próximos passos
 
 - Validar o MCP no Claude Code quando essa etapa for retomada.
-- Definir uma versão fixa do servidor MCP.
 - Revisar as instruções geradas dos agentes conforme os padrões do projeto.
