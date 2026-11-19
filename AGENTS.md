@@ -67,9 +67,6 @@ Automação de testes do Bro Workout em JavaScript.
 
 ## Execução e Git
 
-- Respeite o modo de trabalho combinado com o usuário.
-- Em modo coach, oriente e revise; não edite ou execute ações
-  sem autorização.
 - Não faça commit, push, abertura de PR ou merge sem autorização.
 - Não adicione arquivos de configuração pessoal ou artefatos
   de navegação ao commit.
